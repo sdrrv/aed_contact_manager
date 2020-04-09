@@ -24,6 +24,10 @@ def sync(c):
     c.run("git merge upstream/master")
 
 @task
+def pr(c):
+    c.run("hub pr list --format='[%I] %cI %uI %t [%H] | %U%n'")
+
+@task
 def gui(c):
         c.run("python program.py gui")
 

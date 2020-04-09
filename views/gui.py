@@ -18,7 +18,7 @@ class ContactManagerGUI:
         self.listbox.grid(column=0, row=0)
         self.listbox.bind('<<ListboxSelect>>', self.show_detail)
 
-        frm_detail= Frame(frm_content)
+        frm_detail = Frame(frm_content)
         frm_detail.grid(sticky=N, column=1, row=0)
         detail_title = Label(frm_detail, text="Details:", justify=LEFT)
         detail_title.pack(side=TOP)
