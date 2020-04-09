@@ -1,5 +1,6 @@
 from controllers import ContactManager
 from tkinter import *
+from tkinter import messagebox
 from tkinter.scrolledtext import ScrolledText
 
 class ContactManagerGUI:
@@ -90,14 +91,17 @@ class ContactManagerGUI:
         Button(wnd_add_contact, text="Cancel", command=wnd_add_contact.destroy).grid(sticky=E, column=1, row=3)
 
     def btn_add_contact_add_action(self, parent):
-        name = self.add_contact_name.get()
-        email_address = self.add_contact_email_address.get()
-        phone_number = self.add_contact_phone_number.get()
-        self.cm.create_contact(name, email_address, phone_number)
-        self.populate_list()
-        parent.destroy()
-
-
+        if (self.cm.is_valid_email_address(self.add_contact_email_address.get()) and self.cm.is_valid_phone_number(self.add_contact_phone_number.get())):
+            name = self.add_contact_name.get()
+            email_address = self.add_contact_email_address.get()
+            phone_number = self.add_contact_phone_number.get()
+            self.cm.create_contact(name, email_address, phone_number)
+            self.populate_list()
+            parent.destroy()
+        elif not self.cm.is_valid_email_address(self.add_contact_email_address.get()):
+            messagebox.showwarning("Ok","Email not Valid")
+        elif not self.cm.is_valid_phone_number(self.add_contact_phone_number.get()):
+            messagebox.showwarning("Ok","Phone not Valid")
     def btn_remove_contact_remove_action(self):
         selected_name = self.listbox.get(ACTIVE)
         contact = self.cm.get_contact(selected_name)
