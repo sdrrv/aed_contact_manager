@@ -1,4 +1,5 @@
 from invoke import task
+import re
 
 @task
 def test(c):
@@ -10,13 +11,21 @@ def cov(c):
     c.run("coverage html")
 
 @task
+def setupstream(c, username="amgs"):
+    remotes = c.run("git remote", hide=True).stdout
+    if "upstream" not in remotes:
+        origin_url = c.run("git remote get-url origin", hide=True).stdout.split("\n")[0]
+        project_name = re.search(f"\/\/.+\/.+\/(.+?)\.git$", origin_url).group(1)
+        c.run(f"git remote add upstream https://github.com/{username}/{project_name}.git")
+
+@task(setupstream)
 def sync(c):
     c.run("git fetch upstream")
     c.run("git merge upstream/master")
 
 @task
 def gui(c):
-    c.run("python program.py gui")
+        c.run("python program.py gui")
 
 @task
 def cli(c):
